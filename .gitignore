@@ -1,0 +1,16 @@
+uploads/eperpect.db
+uploads/Thumbs.db
+uploads/usbguardian.db
+uploads/wifi_monitor.db
+
+# Ignore all .log files
+*.log
+
+# Ignore all .tmp files
+*.tmp
+
+# Ignore all .bak files
+*.bak
+
+# Ignore all .db files
+*.db
