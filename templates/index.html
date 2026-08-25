@@ -274,6 +274,22 @@
         color: var(--accent);
       }
 
+      .show-all-item {
+        margin-bottom: 8px;
+        padding-bottom: 9px;
+        border-bottom: 1px solid var(--border);
+        border-radius: 0;
+      }
+
+      .show-all-item .tname .ticon {
+        color: var(--accent);
+      }
+
+      .show-all-item.active {
+        background: rgba(79, 142, 247, 0.1);
+        border-bottom-color: rgba(79, 142, 247, 0.3);
+      }
+
       /* ─── MAIN ─── */
       .main {
         flex: 1;
@@ -688,46 +704,40 @@
         transition: all 0.2s;
       }
 
-      /* Single match — full-width focused layout */
-      #schemaView.single-match {
+      /* Single table selected via sidebar — full-width focused layout */
+      #schemaView.schema-single {
         grid-template-columns: 1fr;
-        max-width: 680px;
-        margin: 0 auto;
         width: 100%;
       }
 
-      #schemaView.single-match .schema-card {
+      #schemaView.schema-single .schema-card {
         border-color: rgba(79, 142, 247, 0.35);
         box-shadow:
           0 0 0 1px rgba(79, 142, 247, 0.15),
           0 4px 24px rgba(0, 0, 0, 0.3);
       }
 
-      #schemaView.single-match .schema-card-header {
+      #schemaView.schema-single .schema-card-header {
         background: rgba(79, 142, 247, 0.08);
         border-bottom-color: rgba(79, 142, 247, 0.2);
         padding: 16px 20px;
       }
 
-      #schemaView.single-match .schema-table-name {
+      #schemaView.schema-single .schema-table-name {
         font-size: 18px;
       }
 
-      #schemaView.single-match .schema-row-count {
+      #schemaView.schema-single .schema-row-count {
         font-size: 13px;
       }
 
-      #schemaView.single-match .schema-col {
-        padding: 10px 20px;
-        font-size: 13px;
+      #schemaView.schema-single .schema-col-chip {
+        min-width: 170px;
+        padding: 12px 14px;
       }
 
-      #schemaView.single-match .schema-col .col-name {
+      #schemaView.schema-single .schema-col-chip .chip-name {
         font-size: 14px;
-      }
-
-      #schemaView.single-match .schema-col .col-type {
-        font-size: 12px;
       }
 
       .schema-card {
@@ -762,42 +772,155 @@
         color: var(--text3);
       }
 
-      .schema-cols {
-        padding: 8px 0;
+      /* Columns laid out horizontally, scrollable when they overflow */
+      .schema-cols-scroll {
+        overflow-x: auto;
+        overflow-y: hidden;
       }
 
-      .schema-col {
+      .schema-cols-scroll::-webkit-scrollbar {
+        height: 6px;
+      }
+      .schema-cols-scroll::-webkit-scrollbar-thumb {
+        background: var(--border2);
+        border-radius: 3px;
+      }
+      .schema-cols-scroll::-webkit-scrollbar-corner {
+        background: var(--surface);
+      }
+
+      .schema-cols-row {
+        display: flex;
+        gap: 10px;
+        padding: 14px 16px;
+        width: max-content;
+        min-width: 100%;
+      }
+
+      .schema-col-chip {
+        flex: 0 0 auto;
+        min-width: 132px;
+        max-width: 240px;
+        background: var(--surface2);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 10px 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        transition: border-color 0.15s;
+      }
+
+      .schema-col-chip:hover {
+        border-color: var(--border2);
+      }
+
+      .schema-col-chip.is-pk {
+        border-color: rgba(245, 166, 35, 0.35);
+      }
+
+      .schema-col-chip .chip-name {
+        font-family: var(--mono);
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text);
+        word-break: break-word;
+        overflow-wrap: anywhere;
+      }
+
+      .schema-col-chip .chip-type {
+        font-family: var(--mono);
+        font-size: 10px;
+        color: var(--text3);
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+        word-break: break-word;
+        overflow-wrap: anywhere;
+      }
+
+      .schema-col-chip .chip-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+      }
+
+      .schema-cols-empty {
+        padding: 16px;
+        color: var(--text3);
+        font-size: 12px;
+        font-family: var(--mono);
+      }
+
+      .schema-rows-toggle {
+        background: transparent;
+        border: 1px solid var(--border2);
+        color: var(--text2);
+        font-family: var(--mono);
+        font-size: 11px;
+        padding: 4px 10px;
+        border-radius: 6px;
+        cursor: pointer;
         display: flex;
         align-items: center;
-        gap: 10px;
-        padding: 7px 16px;
-        border-bottom: 1px solid var(--border);
-        font-family: var(--mono);
-        font-size: 12px;
-        transition: background 0.1s;
+        gap: 6px;
+        transition: all 0.15s;
+        white-space: nowrap;
       }
 
-      .schema-col:last-child {
-        border-bottom: none;
-      }
-      .schema-col:hover {
-        background: rgba(255, 255, 255, 0.02);
+      .schema-rows-toggle:hover {
+        border-color: var(--accent);
+        color: var(--accent);
       }
 
-      .schema-col .col-name {
-        flex: 1;
-        color: var(--text);
+      .schema-rows-toggle .chevron {
+        display: inline-block;
+        transition: transform 0.15s;
+        font-size: 9px;
       }
 
-      .schema-col .col-type {
-        color: var(--text3);
+      .schema-card.rows-open .schema-rows-toggle .chevron {
+        transform: rotate(90deg);
+      }
+
+      .schema-rows-panel {
+        display: none;
+        border-top: 1px solid var(--border);
+        background: var(--bg);
+      }
+
+      .schema-card.rows-open .schema-rows-panel {
+        display: block;
+      }
+
+      .schema-rows-scroll {
+        max-height: 320px;
+        overflow: auto;
+      }
+
+      .schema-rows-scroll table {
         font-size: 11px;
-        text-transform: uppercase;
       }
 
-      .schema-col .badges {
+      .schema-rows-pagination {
         display: flex;
-        gap: 4px;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        padding: 8px 12px;
+        border-top: 1px solid var(--border);
+      }
+
+      .schema-rows-pagination .page-btn {
+        width: 26px;
+        height: 26px;
+        font-size: 11px;
+      }
+
+      .schema-rows-empty {
+        padding: 16px;
+        text-align: center;
+        color: var(--text3);
+        font-size: 12px;
       }
 
       /* ─── QUERY VIEW ─── */
@@ -1257,6 +1380,7 @@
         sortCol: null,
         sortDir: "asc",
         activeTab: "table",
+        schemaFilterTable: null,
       };
 
       let searchTimer = null;
@@ -1301,6 +1425,7 @@
           state.db.path = data.db.path;
           state.currentTable = null;
           state.page = 1;
+          state.schemaFilterTable = null;
 
           renderSidebar();
           document.getElementById("tableFilterWrap").style.display = "block";
@@ -1311,9 +1436,12 @@
 
           showToast(`${data.db.filename} loaded ✓`, "ok");
 
-          // Auto-select first table
+          // Auto-select first table (for the Data tab); Schema view
+          // defaults to "Show all" until a table is clicked.
           const tables = Object.keys(state.db.tables);
           if (tables.length > 0) selectTable(tables[0]);
+          state.schemaFilterTable = null;
+          highlightSidebar();
 
           renderSchema();
         } catch (e) {
@@ -1333,6 +1461,18 @@
         const list = document.getElementById("tablesList");
         list.innerHTML = "";
 
+        const allEl = document.createElement("div");
+        allEl.className = "table-item show-all-item";
+        allEl.dataset.table = "__ALL__";
+        allEl.innerHTML = `
+      <span class="tname">
+        <span class="ticon">▦</span>
+        Show all
+      </span>
+    `;
+        allEl.onclick = () => selectAllSchema();
+        list.appendChild(allEl);
+
         Object.entries(db.tables).forEach(([name, info]) => {
           const el = document.createElement("div");
           el.className = "table-item";
@@ -1347,6 +1487,27 @@
           el.onclick = () => selectTable(name);
           list.appendChild(el);
         });
+
+        highlightSidebar();
+      }
+
+      function highlightSidebar() {
+        const wantAll =
+          state.activeTab === "schema"
+            ? !state.schemaFilterTable
+            : !state.currentTable;
+        const wantName =
+          state.activeTab === "schema"
+            ? state.schemaFilterTable
+            : state.currentTable;
+
+        document.querySelectorAll(".table-item").forEach((el) => {
+          const isAllItem = el.dataset.table === "__ALL__";
+          el.classList.toggle(
+            "active",
+            isAllItem ? wantAll : el.dataset.table === wantName,
+          );
+        });
       }
 
       function selectTable(name) {
@@ -1356,12 +1517,18 @@
         state.sortCol = null;
         document.getElementById("searchInput").value = "";
 
-        // highlight sidebar
-        document.querySelectorAll(".table-item").forEach((el) => {
-          el.classList.toggle("active", el.dataset.table === name);
-        });
+        state.schemaFilterTable = name;
+
+        highlightSidebar();
 
         if (state.activeTab === "table") loadTableData();
+        if (state.activeTab === "schema") renderSchema();
+      }
+
+      function selectAllSchema() {
+        state.schemaFilterTable = null;
+        highlightSidebar();
+        if (state.activeTab === "schema") renderSchema();
       }
 
       // ─── TABS ───
@@ -1392,6 +1559,8 @@
           const val = document.getElementById("schemaFilterInput").value;
           filterSchema(val);
         }
+
+        highlightSidebar();
       }
 
       // ─── TABLE DATA ───
@@ -1565,34 +1734,202 @@
         view.innerHTML = "";
         if (!state.db) return;
 
-        Object.entries(state.db.tables).forEach(([name, info]) => {
+        const filterName = state.schemaFilterTable;
+        const allEntries = Object.entries(state.db.tables);
+        const entries =
+          filterName && state.db.tables[filterName]
+            ? allEntries.filter(([name]) => name === filterName)
+            : allEntries;
+
+        view.classList.toggle("schema-single", !!filterName);
+
+        if (entries.length === 0) {
+          view.innerHTML =
+            '<div class="empty-state"><div class="empty-state-icon">🫙</div><span>No matching table</span></div>';
+          return;
+        }
+
+        entries.forEach(([name, info]) => {
           const card = document.createElement("div");
           card.className = "schema-card";
           card.dataset.table = name;
-          let colsHtml = info.columns
-            .map(
-              (col) => `
-      <div class="schema-col">
-        <span class="col-name">${escHtml(col.name)}</span>
-        <div class="badges">
+
+          const colsHtml = info.columns.length
+            ? info.columns
+                .map(
+                  (col) => `
+      <div class="schema-col-chip ${col.pk ? "is-pk" : ""}">
+        <span class="chip-name">${escHtml(col.name)}</span>
+        <span class="chip-type">${escHtml(col.type || "TEXT")}</span>
+        <div class="chip-badges">
           ${col.pk ? '<span class="pk-badge">PK</span>' : ""}
           ${col.notnull ? '<span class="col-type-badge">NOT NULL</span>' : ""}
         </div>
-        <span class="col-type">${escHtml(col.type || "TEXT")}</span>
       </div>
     `,
-            )
-            .join("");
+                )
+                .join("")
+            : '<div class="schema-cols-empty">No columns</div>';
 
+          const safeId = cssId(name);
           card.innerHTML = `
       <div class="schema-card-header">
         <span class="schema-table-name">⊞ ${escHtml(name)}</span>
-        <span class="schema-row-count">${fmtNum(info.row_count)} rows</span>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span class="schema-row-count">${fmtNum(info.row_count)} rows · ${info.columns.length} cols</span>
+          <button class="schema-rows-toggle" onclick="toggleSchemaRows('${jsAttrEscape(name)}')">
+            <span class="chevron">▶</span> View rows
+          </button>
+        </div>
       </div>
-      <div class="schema-cols">${colsHtml}</div>
+      <div class="schema-cols-scroll">
+        <div class="schema-cols-row">${colsHtml}</div>
+      </div>
+      <div class="schema-rows-panel" id="rows-panel-${safeId}">
+        <div class="schema-rows-scroll" id="rows-scroll-${safeId}">
+          <div class="schema-rows-empty"><div class="spinner"></div></div>
+        </div>
+        <div class="schema-rows-pagination" id="rows-pagination-${safeId}" style="display: none;"></div>
+      </div>
     `;
           view.appendChild(card);
         });
+      }
+
+      // ─── SCHEMA ROW PREVIEW ───
+      const schemaRowState = {};
+      const SCHEMA_ROWS_PAGE_SIZE = 20;
+
+      function toggleSchemaRows(tableName) {
+        const card = document.querySelector(
+          `.schema-card[data-table="${CSS.escape(tableName)}"]`,
+        );
+        if (!card) return;
+        const isOpen = card.classList.toggle("rows-open");
+        if (isOpen && !schemaRowState[tableName]) {
+          schemaRowState[tableName] = { page: 1 };
+          loadSchemaRows(tableName, 1);
+        }
+      }
+
+      async function loadSchemaRows(tableName, page) {
+        const safeId = cssId(tableName);
+        const scrollEl = document.getElementById(`rows-scroll-${safeId}`);
+        const pagEl = document.getElementById(`rows-pagination-${safeId}`);
+        if (!scrollEl) return;
+
+        scrollEl.innerHTML =
+          '<div class="schema-rows-empty"><div class="spinner"></div></div>';
+        pagEl.style.display = "none";
+
+        try {
+          const res = await fetch("/table-data", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              path: state.db.path,
+              table: tableName,
+              page,
+              page_size: SCHEMA_ROWS_PAGE_SIZE,
+            }),
+          });
+          const data = await res.json();
+
+          if (data.error) {
+            scrollEl.innerHTML = `<div class="error-msg">⚠ ${escHtml(data.error)}</div>`;
+            return;
+          }
+
+          schemaRowState[tableName].page = data.page;
+          renderSchemaRowsTable(scrollEl, data, tableName);
+          renderSchemaRowsPagination(pagEl, data, tableName);
+        } catch (e) {
+          scrollEl.innerHTML =
+            '<div class="error-msg">⚠ Failed to load rows</div>';
+        }
+      }
+
+      function renderSchemaRowsTable(scrollEl, data, tableName) {
+        const { columns, rows, page, page_size } = data;
+
+        if (rows.length === 0) {
+          scrollEl.innerHTML =
+            '<div class="schema-rows-empty">🫙 No rows in this table</div>';
+          return;
+        }
+
+        const tableInfo = state.db.tables[tableName];
+        const pkCols = new Set(
+          tableInfo.columns.filter((c) => c.pk).map((c) => c.name),
+        );
+
+        let html = '<table><thead><tr><th class="row-num">#</th>';
+        columns.forEach((col) => {
+          html += `<th>
+      <div class="th-inner">
+        ${pkCols.has(col) ? '<span class="pk-badge">PK</span>' : ""}
+        ${escHtml(col)}
+      </div>
+    </th>`;
+        });
+        html += "</tr></thead><tbody>";
+
+        const offset = (page - 1) * page_size;
+        rows.forEach((row, i) => {
+          html += `<tr><td class="row-num">${offset + i + 1}</td>`;
+          columns.forEach((col) => {
+            const val = row[col];
+            let cls = "",
+              display = "";
+            if (val === null || val === undefined) {
+              cls = "null-val";
+              display = "NULL";
+            } else if (typeof val === "number") {
+              cls = "num-val";
+              display = val.toLocaleString();
+            } else if (typeof val === "boolean") {
+              cls = "bool-val";
+              display = val ? "true" : "false";
+            } else {
+              display = String(val);
+            }
+            html += `<td class="${cls}" title="${escHtml(String(val ?? ""))}">${escHtml(display)}</td>`;
+          });
+          html += "</tr>";
+        });
+        html += "</tbody></table>";
+        scrollEl.innerHTML = html;
+      }
+
+      function renderSchemaRowsPagination(pagEl, data, tableName) {
+        const { page, total_pages, total } = data;
+
+        if (total_pages <= 1) {
+          pagEl.style.display = "none";
+          return;
+        }
+
+        pagEl.style.display = "flex";
+        pagEl.innerHTML = `
+      <button class="page-btn" onclick="schemaGoPage('${jsAttrEscape(tableName)}', ${page - 1})" ${page <= 1 ? "disabled" : ""}>‹</button>
+      <span class="page-info">${page} / ${total_pages} · ${fmtNum(total)} rows</span>
+      <button class="page-btn" onclick="schemaGoPage('${jsAttrEscape(tableName)}', ${page + 1})" ${page >= total_pages ? "disabled" : ""}>›</button>
+    `;
+      }
+
+      function schemaGoPage(tableName, page) {
+        if (page < 1) return;
+        loadSchemaRows(tableName, page);
+      }
+
+      function cssId(str) {
+        return String(str).replace(/[^a-zA-Z0-9_-]/g, "_");
+      }
+
+      function jsAttrEscape(str) {
+        // Safe to embed inside a single-quoted JS string literal
+        // that itself sits inside a double-quoted HTML attribute.
+        return String(str).replace(/\\/g, "\\\\").replace(/'/g, "\\'");
       }
 
       // ─── SQL QUERY ───
@@ -1695,7 +2032,9 @@
       // ─── TABLE FILTER ───
       function filterTables(query) {
         const q = query.trim().toLowerCase();
-        const items = document.querySelectorAll(".table-item");
+        const items = document.querySelectorAll(
+          ".table-item:not(.show-all-item)",
+        );
         const clearBtn = document.getElementById("filterClearBtn");
         const noMatch = document.getElementById("noMatchMsg");
 
@@ -1754,8 +2093,6 @@
         } else {
           matchInfo.textContent = "";
         }
-
-        view.classList.toggle("single-match", visible === 1 && q.length > 0);
       }
 
       function clearTableFilter() {
