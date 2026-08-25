@@ -9,7 +9,7 @@ from werkzeug.utils import secure_filename
 app = Flask(__name__)
 app.secret_key = "db-visualizer-secret-2024"
 app.config["MAX_CONTENT_LENGTH"] = 100 * 1024 * 1024  # 100MB max
-UPLOAD_FOLDER = "uploads"
+UPLOAD_FOLDER = "/tmp/uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 ALLOWED_EXTENSIONS = {".db", ".sqlite", ".sqlite3", ".s3db", ".sl3"}
